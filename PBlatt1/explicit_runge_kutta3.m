@@ -1,7 +1,21 @@
-function [outputArg1,outputArg2] = rungeKutta(inputArg1,inputArg2)
-%RUNGEKUTTA Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = inputArg1;
-outputArg2 = inputArg2;
+function solRungeKutta = rungeKutta(f,y_0, T, tau)
+
+K = round(T/tau, 0);
+d = size(y_0);
+d = d(1,1);
+y = zeros(d,K+1);
+k1 = zeros(d,K+1);
+k2 = zeros(d,K+1);
+k3 = zeros(d,K+1);
+y(:,1) = y_0;
+
+for i=1:K
+    k1(:,i+1) = f(tau*i, y(:,i));
+    k2(:,i+1) = f((tau*i + (1/2) *(tau)),y(:,i) + tau *((1/2) * k1(:,i)));
+    k3(:,i+1) = f((tau*i + tau), y(:,i) + tau *(-1*k1(:,i) + 2*k2(:,i)));
+    
+    y(:,i+1) = y(:,i) + tau*((1/6) * k1(:,i)+ (2/3) * k2(:,i) +(1/6) *k3(:,i));
+end
+    solRungeKutta = y;
 end
 
